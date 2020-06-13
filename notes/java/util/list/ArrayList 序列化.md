@@ -82,7 +82,7 @@ class Student implements Serializable {
 // sout [Student{name='Ken', age=23}, Student{name='dsxsb', age=24}, Student{name='Rose', age=25}]
 ```
 
-ArrayList 底层是通过，elementData 又是被标记的变量，为什么还会被序列化保存下来？
+ArrayList 底层是通过数组实现存储元素的，elementData 又是被标记的变量，为什么还会被序列化保存下来？
 
 > 我们先介绍一下 ObjectInputStream
 
@@ -184,9 +184,9 @@ ArrayList 底层是通过，elementData 又是被标记的变量，为什么还�
 
 `invokeWriteObject()` 方法注释 `Invokes the writeObject method of the represented serializable class.`
 翻译就是`调用所表示的可序列化类的 writeObject 方法。`
-所以就是他会去通过反射调用开发者自定义的 writeObject()。这就是突破口，是否 ArrayList 有自定义的 writeObject()，我们找找看。
+所以就是他会去通过反射调用开发者自定义的 `writeObject()`。这就是突破口，是否 ArrayList 有自定义的 `writeObject()`，我们找找看。
 
-找啊找，哎呀，果然在 ArrayList 源码中找到了 writeObject() 方法：
+找啊找，哎呀，果然在 ArrayList 源码中找到了 `writeObject()` 方法：
 ```java
     private void writeObject(java.io.ObjectOutputStream s)
         throws java.io.IOException{
@@ -209,9 +209,9 @@ ArrayList 底层是通过，elementData 又是被标记的变量，为什么还�
 ```
 
 看到上面循环里的 `s.writeObject(elementData[i]);` 没，通过自定义 writeObject() 对数组元素进行序列化。
-从侧面也能看出，如果想要序列化 ArrayList ，它的元素对象也是需要可序列化的，也是可以自己重写 writeObject();
+从侧面也能看出，如果想要序列化 ArrayList ，它的元素对象也是需要可序列化的，也是可以自己重写 `writeObject()`。
 
 # 总结
 
 1. 到这里我以从 ArrayList 序列化了解到了，如果一个类想被序列化，需要实现Serializable接口。
-2. 在对象中实现自定义方法 writeObject() 和 readObject() 方法可以实现自定义序列化。
+2. 在对象中实现自定义方法 `writeObject()` 和 `readObject()` 方法可以实现自定义序列化。
