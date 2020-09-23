@@ -1,0 +1,6 @@
+[mysqld]
+default_authentication_plugin=mysql_native_password
+log-bin = mysql-bin-31s
+server_id = 31
+datadir = /var/lib/mysql
+sql_mode=STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION

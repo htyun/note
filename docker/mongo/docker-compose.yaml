@@ -1,0 +1,45 @@
+version: "3"
+services:
+ mongo-71:
+#  network_mode: "mongo-net"
+  networks:
+   mongo-net:
+    ipv4_address: 10.27.0.71
+  image: mongo
+  restart: always
+  hostname: m-71
+  domainname: 10.27.0.71
+  container_name: mongo-71
+#  expose:
+#   - 27017
+  ports:
+   - 27071:27017
+  volumes:
+   - /tools/docker/mongodb/db_27071:/data/db
+   - /tools/docker/mongodb/key_file:/opt/keyfile/key_file
+   - /tools/docker/mongodb/27071.conf:/etc/mongo.conf
+  command: mongod -f /etc/mongo.conf --replSet mongoreplset --oplogSize 128  --auth --keyFile /opt/keyfile/key_file # 第一次运行时这一段要注释掉，下面一致
+  
+ mongo-73:
+#  network_mode: "mongo-net"
+  networks:
+   mongo-net:
+    ipv4_address: 10.27.0.73
+  image: mongo
+  restart: always
+  hostname: m-73
+  domainname: 10.27.0.73
+  container_name: mongo-73
+#  expose:
+#   - 27017
+  ports:
+   - 27073:27017
+  volumes:
+   - /tools/docker/mongodb/db_27073:/data/db
+   - /tools/docker/mongodb/key_file:/opt/keyfile/key_file
+   - /tools/docker/mongodb/27073.conf:/etc/mongo.conf
+  command: mongod -f /etc/mongo.conf --replSet mongoreplset --smallfiles --oplogSize 128  --auth --keyFile /opt/keyfile/key_file
+  
+networks:
+ mongo-net:
+  external: true

@@ -1,0 +1,153 @@
+# docker network create --subnet=10.81.0.0/16 zookeeper-net
+
+# 1、开放端口
+# firewall-cmd --zone=public --add-port=5672/tcp --permanent   # 开放5672端口
+# firewall-cmd --zone=public --remove-port=5672/tcp --permanent  #关闭5672端口
+# firewall-cmd --reload   # 配置立即生效
+
+# 2、查看防火墙所有开放的端口
+# firewall-cmd --zone=public --list-ports
+
+# 3.、关闭防火墙
+# 如果要开放的端口太多，嫌麻烦，可以关闭防火墙，安全性自行评估
+# systemctl stop firewalld.service
+
+version: '3.1'
+services:
+    zookeeper-81:
+        image: zookeeper:3.4
+        container_name: zookeeper-81
+        restart: always
+        networks:
+            zookeeper-net:
+                ipv4_address: 10.81.0.81
+        hostname: zookeeper-81
+        privileged: true
+        ports:
+            - 8181:2181
+            - 8182:2888
+            - 8183:3888
+        volumes:
+            - /tools/docker/zookeeper/data_81:/data
+            - /tools/docker/zookeeper/datalog_81:/datalog
+        environment:
+            TZ: Asia/Shanghai
+            ZOO_AUTOPURGE_PURGEINTERVAL: 1 # 配置1个小时清理一下zk日志 
+            ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3 # 配置最多保留3个zk日志
+            ZOO_PORT: 2181
+            ZOO_MY_ID: 81
+            ZOO_SERVERS: server.81=zookeeper-81:8182:8183 server.82=zookeeper-82:8282:8283 server.83=zookeeper-83:8382:8383 server.84=zookeeper-84:8482:8483 server.85=zookeeper-85:8582:8583
+    zookeeper-82:
+        image: zookeeper:3.4
+        container_name: zookeeper-82
+        restart: always
+        # links:
+        #     - zookeeper-81
+        # depends_on:
+        #     - zookeeper-81
+        networks:
+            zookeeper-net:
+                ipv4_address: 10.81.0.82
+        hostname: zookeeper-82
+        privileged: true
+        ports:
+            - 8281:2181
+            - 8282:2888
+            - 8283:3888
+        volumes:
+            - /tools/docker/zookeeper/data_82:/data
+            - /tools/docker/zookeeper/datalog_82:/datalog
+        environment:
+            TZ: Asia/Shanghai
+            ZOO_AUTOPURGE_PURGEINTERVAL: 1 # 配置1个小时清理一下zk日志 
+            ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3 # 配置最多保留3个zk日志
+            ZOO_PORT: 2181
+            ZOO_MY_ID: 82
+            ZOO_SERVERS: server.81=zookeeper-81:8182:8183 server.82=zookeeper-82:8282:8283 server.83=zookeeper-83:8382:8383 server.84=zookeeper-84:8482:8483 server.85=zookeeper-85:8582:8583
+    zookeeper-83:
+        image: zookeeper:3.4
+        container_name: zookeeper-83
+        restart: always
+        # links:
+        #     - zookeeper-81
+        #     - zookeeper-82
+        # depends_on:
+        #     - zookeeper-82
+        networks:
+            zookeeper-net:
+                ipv4_address: 10.81.0.83
+        hostname: zookeeper-83
+        privileged: true
+        ports:
+            - 8381:2181
+            - 8382:2888
+            - 8383:3888
+        volumes:
+            - /tools/docker/zookeeper/data_83:/data
+            - /tools/docker/zookeeper/datalog_83:/datalog
+        environment:
+            TZ: Asia/Shanghai
+            ZOO_AUTOPURGE_PURGEINTERVAL: 1 # 配置1个小时清理一下zk日志 
+            ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3 # 配置最多保留3个zk日志
+            ZOO_PORT: 2181
+            ZOO_MY_ID: 83
+            ZOO_SERVERS: server.81=zookeeper-81:8182:8183 server.82=zookeeper-82:8282:8283 server.83=zookeeper-83:8382:8383 server.84=zookeeper-84:8482:8483 server.85=zookeeper-85:8582:8583
+    zookeeper-84:
+        image: zookeeper:3.4
+        container_name: zookeeper-84
+        restart: always
+        # links:
+        #     - zookeeper-81
+        #     - zookeeper-82
+        # depends_on:
+        #     - zookeeper-82
+        networks:
+            zookeeper-net:
+                ipv4_address: 10.81.0.84
+        hostname: zookeeper-84
+        privileged: true
+        ports:
+            - 8481:2181
+            - 8482:2888
+            - 8483:3888
+        volumes:
+            - /tools/docker/zookeeper/data_84:/data
+            - /tools/docker/zookeeper/datalog_84:/datalog
+        environment:
+            TZ: Asia/Shanghai
+            ZOO_AUTOPURGE_PURGEINTERVAL: 1 # 配置1个小时清理一下zk日志 
+            ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3 # 配置最多保留3个zk日志
+            ZOO_PORT: 2181
+            ZOO_MY_ID: 84
+            ZOO_SERVERS: server.81=zookeeper-81:8182:8183 server.82=zookeeper-82:8282:8283 server.83=zookeeper-83:8382:8383 server.84=zookeeper-84:8482:8483 server.85=zookeeper-85:8582:8583
+    zookeeper-85:
+        image: zookeeper:3.4
+        container_name: zookeeper-85
+        restart: always
+        # links:
+        #     - zookeeper-81
+        #     - zookeeper-82
+        # depends_on:
+        #     - zookeeper-82
+        networks:
+            zookeeper-net:
+                ipv4_address: 10.81.0.85
+        hostname: zookeeper-85
+        privileged: true
+        ports:
+            - 8581:2181
+            - 8582:2888
+            - 8583:3888
+        volumes:
+            - /tools/docker/zookeeper/data_85:/data
+            - /tools/docker/zookeeper/datalog_85:/datalog
+        environment:
+            TZ: Asia/Shanghai
+            ZOO_AUTOPURGE_PURGEINTERVAL: 1 # 配置1个小时清理一下zk日志 
+            ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3 # 配置最多保留3个zk日志
+            ZOO_PORT: 2181
+            ZOO_MY_ID: 85
+            ZOO_SERVERS: server.81=zookeeper-81:8182:8183 server.82=zookeeper-82:8282:8283 server.83=zookeeper-83:8382:8383 server.84=zookeeper-84:8482:8483 server.85=zookeeper-85:8582:8583
+networks:
+    zookeeper-net:
+        external: true

@@ -1,0 +1,25 @@
+version: "3"
+services:
+ nginx-80:
+  build:
+   context: .
+   dockerfile: Dockerfile
+  networks:
+   nginx-net:
+    ipv4_address: 10.2.0.80
+  image: ht/nginx
+  restart: always
+  hostname: nginx-80
+  domainname: 10.2.0.80
+  container_name: nginx-80
+  ports:
+   - 80:80
+  volumes:
+   - /tools/docker/nginx/conf:/etc/nginx
+#   - /tools/docker/nginx/config:/etc/nginx/conf.d
+   - /tools/docker/nginx/log:/var/log/nginx
+   - /tools/docker/nginx/html:/usr/share/nginx/html
+
+networks:
+ nginx-net:
+  external: true

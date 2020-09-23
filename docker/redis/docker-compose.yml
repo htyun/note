@@ -1,0 +1,57 @@
+version: "3"
+services:
+ redis-81:
+  networks:
+   redis-net:
+    ipv4_address: 10.79.0.81
+  image: redis
+  restart: always
+  container_name: redis-81
+  hostname: redis-81
+  ports:
+    - 8179:8179
+    - 18179:18179
+  volumes:
+   - /tools/docker/redis/conf/8179.conf:/etc/redis/8179.conf
+   - /tools/docker/redis/data_81/:/data
+  command: redis-server /etc/redis/8179.conf
+  
+ redis-82:
+  depends_on:
+   - redis-81
+  networks:
+   redis-net:
+    ipv4_address: 10.79.0.82
+  image: redis
+  restart: always
+  container_name: redis-82
+  hostname: redis-82
+  ports:
+    - 8279:8279
+    - 18279:18279
+  volumes:
+   - /tools/docker/redis/conf/8279.conf:/etc/redis/8279.conf
+   - /tools/docker/redis/data_82/:/data
+  command: redis-server /etc/redis/8279.conf #--slaveof redis-81
+
+ redis-83:
+  depends_on:
+   - redis-81
+  networks:
+   redis-net:
+    ipv4_address: 10.79.0.83
+  image: redis
+  restart: always
+  container_name: redis-83
+  hostname: redis-83
+  ports:
+    - 8379:8379
+    - 18379:18379
+  volumes:
+   - /tools/docker/redis/conf/8379.conf:/etc/redis/8379.conf
+   - /tools/docker/redis/data_83/:/data
+  command: redis-server /etc/redis/8379.conf
+  
+networks:
+ redis-net:
+  external: true

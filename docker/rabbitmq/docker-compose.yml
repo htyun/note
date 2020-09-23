@@ -1,0 +1,48 @@
+version: "3"
+services:
+  rabbit-71:
+    image: rabbitmq:3.6-management
+    container_name: rabbit-71
+    restart: always
+    networks:
+      rabbitmq-net:
+        ipv4_address: 10.72.0.71
+    hostname: rabbit-71
+    ports:
+      - 7172:15672
+      - 7156:5672
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=ht
+      - RABBITMQ_ERLANG_COOKIE=rabbit-cookie
+#      - RABBITMQ_HOSTNAME=rabbit-71
+#      - RABBITMQ_NODENAME=rabbit-71
+    volumes:
+#      - /tools/docker/rabbitmq/etc/rabbitmq:/etc/rabbitmq
+      - /tools/docker/rabbitmq/lib/rabbitmq:/var/lib/rabbitmq
+      - /tools/docker/rabbitmq/log/rabbitmq/:/var/log/rabbitmq
+      
+  rabbit-haproxy:
+    build:
+     context: .
+     dockerfile: Dockerfile
+    image: ht/haproxy
+    container_name: rabbit-haproxy
+    restart: always
+    networks:
+      rabbitmq-net:
+        ipv4_address: 10.72.0.77
+    depends_on:
+     - rabbit-71
+    hostname: rabbit-haproxy
+    ports:
+      - 7772:5672
+      - 7710:1080
+    volumes:
+      - /tools/docker/rabbitmq/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    environment:
+      - CONTAINER_NAME=rabbit-haproxy
+
+networks:
+ rabbitmq-net:
+  external: true

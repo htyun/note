@@ -1,0 +1,45 @@
+version: "3"
+services:
+ mysql8-33:
+#  network_mode: "mysql-net"
+  networks:
+   mysql-net:
+    ipv4_address: 10.8.0.33
+  image: mysql
+  restart: always
+  container_name: mysql8-33
+  hostname: mysql8-33
+  ports:
+   - 3308:3306
+  volumes:
+   - /tools/docker/mysql8/data_33/:/var/lib/mysql
+   - /tools/docker/mysql8/conf/my_33.cnf:/etc/my.cnf
+  environment:
+   MYSQL_ROOT_PASSWORD: ht
+   MYSQL_USER: admin   #创建admin用户
+   MYSQL_PASSWORD: ht  #设置admin用户的密码
+  command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci #设置utf8字符集
+
+ mysql8-31:
+#  network_mode: "mysql-net"
+  networks:
+   mysql-net:
+    ipv4_address: 10.8.0.31
+  image: mysql
+  restart: always
+  hostname: mysql8-31
+  container_name: mysql8-31
+  ports:
+   - 3108:3306
+  volumes:
+   - /tools/docker/mysql8/data_31/:/var/lib/mysql
+   - /tools/docker/mysql8/conf/my_31.cnf:/etc/my.cnf
+  environment:
+   MYSQL_ROOT_PASSWORD: ht
+   MYSQL_USER: admin   #创建admin用户
+   MYSQL_PASSWORD: ht  #设置admin用户的密码
+  command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci #设置utf8字符集
+
+networks:
+ mysql-net:
+  external: true
