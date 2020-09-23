@@ -1,3 +1,3 @@
-# note-java
+# note
 
-## 个人java学习笔记
+## 个人学习笔记
